@@ -1,27 +1,25 @@
 import React from 'react';
 import Like from './common/Like.jsx';
 
-class Movie extends React.Component {
-    constructor (props) {
-        super(props);
-    }
+const Movie = (props) => {
 
-    render () {
-        return (
-            <tr>
-            <td>{this.props.movie.title}</td>
-            <td>{this.props.movie.genre.name}</td>
-            <td>{this.props.movie.numberInStock}</td>
-            <td>{this.props.movie.dailyRentalRate}</td>
-            <td>
-                <Like liked={this.props.movie.liked} movie={this.props.movie} onLikeToggle={this.props.onLikeToggle}/>
-            </td>
-            <td>
-              <button onClick={() => this.props.onDelete(this.props.movie)} className="btn btn-danger btn-sm">Delete</button>
-            </td>
-          </tr>
-        );
-    }
+  const { onDelete, movie, onLikeToggle } = props;
+
+  return (
+    <tr>
+      <td>{movie.title}</td>
+      <td>{movie.genre.name}</td>
+      <td>{movie.numberInStock}</td>
+      <td>{movie.dailyRentalRate}</td>
+      <td>
+        <Like liked={movie.liked} movie={movie} onLikeToggle={onLikeToggle} />
+      </td>
+      <td>
+        <button onClick={() => onDelete(movie)} className="btn btn-danger btn-sm">Delete</button>
+      </td>
+    </tr>
+  )
+
 }
 
 export default Movie;

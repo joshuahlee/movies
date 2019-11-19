@@ -1,17 +1,22 @@
 import React from 'react';
 
 const Like = props => {
+
   let classes = "fa fa-heart";
   if (!props.liked) {
     classes += "-o"
   }
+
+  const { movie, onLikeToggle } = props;
+
   return (
     <i
-      onClick={() => props.onLikeToggle(props.movie.like)}
+      onClick={() => onLikeToggle(movie)}
       className={classes}
       aria-hidden="true"
     />
   )
+  
 }
 
 export default Like;
