@@ -1,22 +1,36 @@
 import React from 'react';
-import Movie from './Movie.jsx'
 
-const TableBody = (props) => {
+class TableBody extends React.Component {
 
-  const { movies, onDelete, onLikeToggle } = props;
+  renderCell = (movie, column) => {
+    if (column.content) {
+      return column.content(movie)
+    } else {
+      return _.get(movie, column.path)
+    }
+  }
+  
+  createKey = (movie, column) => {
+    return movie._id + (column.path || column.key);
+  }
 
-  return (
-    <tbody>
-      {movies.map(movie =>
-        <Movie
-          key={movie._id}
-          movie={movie}
-          onDelete={onDelete}
-          onLikeToggle={onLikeToggle}
-        />
-      )}
-    </tbody>
-  )
+  render () {
+    const { movies, columns } = this.props;
+  
+    return (
+      <tbody>
+        {movies.map(movie => (
+          <tr key={movie._id}>
+            {columns.map(column => (
+              <td key={this.createKey(movie, column)}>
+                {this.renderCell(movie, column)}
+              </td>
+            ))}
+         </tr>
+        ))}
+      </tbody>
+    )
+  }
 
 }
 

@@ -1,9 +1,7 @@
 import React from 'react';
 import ListEntry from './ListEntry.jsx'
 
-const ListGroup = (props) => {
-
-  const { items, textProperty, valueProperty, onGenreSelect, selectedItem } = props;
+const ListGroup = ({ items, textProperty, valueProperty, onGenreSelect, selectedItem }) => {
 
   return (
     <ul className="list-group">

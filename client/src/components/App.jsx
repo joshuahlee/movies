@@ -16,7 +16,7 @@ class App extends React.Component {
     this.state = {
       movies: [],
       genres: [],
-      pageSize: 3,
+      pageSize: 4,
       currentPage: 1,
       selectedGenre: null,
       sortColumn: { path: 'title', order: 'asc' }
@@ -24,7 +24,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    const genres = [{ name: 'All' }, ...getGenres()]
+    const genres = [{ name: 'All Genres' }, ...getGenres()]
     this.setState({ movies: movieData, genres: genres })
   }
 
@@ -50,33 +50,28 @@ class App extends React.Component {
     this.setState({ selectedGenre: genre, currentPage: 1 })
   }
 
-  handleSort = path => {
-    const sortColumn = {... this.state.sortColumn}
-    if (sortColumn.path === path) {
-      sortColumn.order = (sortColumn.order === 'asc') ? 'desc' : 'asc';
-    } else {
-      sortColumn.path = path;
-      sortColumn.order = 'asc';
-    }
+  handleSort = sortColumn => {
     this.setState({ sortColumn })
   }
 
-  render() {
-    const { length: count } = this.state.movies;
+  getPageData = () => {
     const { pageSize, currentPage, movies: allMovies, selectedGenre, sortColumn } = this.state;
-
-    if (count === 0) {
-      return <p>There are no movies in the database.</p>;
-    }
-
     const filtered =
       selectedGenre && selectedGenre._id
         ? allMovies.filter(m => m.genre._id === selectedGenre._id)
         : allMovies;
-
     const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
-
     const movies = paginate(sorted, currentPage, pageSize)
+    return { totalCount: filtered.length, data: movies, filtered: filtered }
+  }
+
+  render() {
+    const { length: count } = this.state.movies;
+    const { pageSize, currentPage, sortColumn } = this.state;
+    if (count === 0) {
+      return <p>There are no movies in the database.</p>;
+    }
+    const { totalCount, data: movies, filtered } = this.getPageData()
 
     return (
       <main className="container">
@@ -91,13 +86,14 @@ class App extends React.Component {
           <div className="col">
             <Movies
               movies={movies}
+              sortColumn={sortColumn}
               filtered={filtered}
               onDelete={this.handleDelete}
               onLikeToggle={this.handleLikeToggle}
               onSort={this.handleSort}
             />
             <Pagination
-              itemsCount={filtered.length}
+              itemsCount={totalCount}
               currentPage={currentPage}
               pageSize={pageSize}
               onPageChange={this.handlePageChange}

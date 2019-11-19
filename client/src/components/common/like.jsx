@@ -1,13 +1,11 @@
 import React from 'react';
 
-const Like = props => {
+const Like = ({ movie, onLikeToggle, liked }) => {
 
   let classes = "fa fa-heart";
-  if (!props.liked) {
+  if (!liked) {
     classes += "-o"
   }
-
-  const { movie, onLikeToggle } = props;
 
   return (
     <i
@@ -16,7 +14,6 @@ const Like = props => {
       aria-hidden="true"
     />
   )
-  
 }
 
 export default Like;
